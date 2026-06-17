@@ -1,72 +1,34 @@
 import { useState } from 'react'
-import { Wallet, Lock, LogOut, Copy, Check, TrendingUp, DollarSign, Send } from 'lucide-react'
-import { Link } from 'react-router-dom'
-
-interface MetaMaskProvider extends any {
-  request: (args: { method: string; params?: any[] }) => Promise<any>
-}
+import { Wallet, Lock, LogOut, Copy, Check } from 'lucide-react'
 
 export default function Admin() {
-  const [metamaskWallet, setMetamaskWallet] = useState<string | null>(null)
+  const [adminWallet, setAdminWallet] = useState<string | null>(null)
   const [walletInput, setWalletInput] = useState('')
   const [copied, setCopied] = useState(false)
   const [isConnected, setIsConnected] = useState(false)
-  const [isConnecting, setIsConnecting] = useState(false)
 
-  // Simulated revenue data
-  const revenueData = {
-    totalRevenue: 125450.50,
-    monthlyRevenue: 45230.75,
-    courseRevenue: 89650.30,
-    subscriptionRevenue: 35800.20,
-    pendingPayouts: 12300.00,
-    walletBalance: 2.5,
-    conversions: 1240,
-    avgOrderValue: 101.17,
+  // Simulated wallet data
+  const walletData = {
+    address: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb',
+    balance: 45.25,
+    revenue: 12450.50,
+    pendingPayouts: 3200.00,
+    totalEarnings: 52650.50,
   }
 
-  const handleMetaMaskConnect = async () => {
-    setIsConnecting(true)
-    try {
-      // Check if MetaMask is installed
-      if (typeof window !== 'undefined' && (window as any).ethereum) {
-        const ethereum = (window as any).ethereum as MetaMaskProvider
-        
-        // Request account access
-        const accounts = await ethereum.request({ 
-          method: 'eth_requestAccounts' 
-        })
-        
-        if (accounts && accounts.length > 0) {
-          setMetamaskWallet(accounts[0])
-          setIsConnected(true)
-          setWalletInput('')
-        }
-      } else {
-        alert('MetaMask is not installed. Please install it to connect.')
-      }
-    } catch (error: any) {
-      console.error('MetaMask connection error:', error)
-      alert('Failed to connect MetaMask: ' + error.message)
-    } finally {
-      setIsConnecting(false)
-    }
-  }
-
-  const handleManualConnect = () => {
-    if (walletInput.toLowerCase().startsWith('0x') && walletInput.length === 42) {
-      setMetamaskWallet(walletInput)
+  const handleConnect = () => {
+    if (walletInput.toLowerCase().startsWith('0x')) {
+      setAdminWallet(walletInput)
       setIsConnected(true)
       setWalletInput('')
     } else {
-      alert('Please enter a valid Ethereum wallet address (0x...)')
+      alert('Please enter a valid Ethereum wallet address')
     }
   }
 
   const handleDisconnect = () => {
-    setMetamaskWallet(null)
+    setAdminWallet(null)
     setIsConnected(false)
-    setWalletInput('')
   }
 
   const handleCopy = (text: string) => {
@@ -81,79 +43,58 @@ export default function Admin() {
         {/* Header */}
         <div className="mb-12">
           <h1 className="text-4xl font-bold mb-2">Admin Dashboard</h1>
-          <p className="text-gray-400">Manage your MetaMask wallet and track revenue</p>
+          <p className="text-gray-400">Manage your admin wallet and earnings</p>
         </div>
 
-        {/* Security Alert */}
+        {/* Warning Alert */}
         <div className="glass-effect p-4 border-l-4 border-yellow-500 mb-8 flex items-start space-x-3">
           <Lock size={20} className="text-yellow-500 flex-shrink-0 mt-0.5" />
           <div>
             <p className="font-semibold text-yellow-400">Security Notice</p>
-            <p className="text-gray-300 text-sm">Connect only a dedicated MetaMask wallet for revenue collection. Never share your private keys or seed phrase.</p>
+            <p className="text-gray-300 text-sm">Only connect a dedicated wallet for revenue collection. Never share your private keys.</p>
           </div>
         </div>
 
         {/* Main Content */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-          {/* Left Column - MetaMask Connection */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Left Column - Wallet Connection */}
           <div className="md:col-span-1">
-            <div className="glass-effect p-8 h-full">
+            <div className="glass-effect p-8">
               <h2 className="text-2xl font-bold mb-6 flex items-center space-x-2">
                 <Wallet size={24} />
-                <span>MetaMask Wallet</span>
+                <span>Admin Wallet</span>
               </h2>
 
               {!isConnected ? (
                 <div className="space-y-4">
-                  <button
-                    onClick={handleMetaMaskConnect}
-                    disabled={isConnecting}
-                    className="w-full bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white font-semibold py-3 px-4 rounded-lg transition flex items-center justify-center space-x-2"
-                  >
-                    <Wallet size={20} />
-                    <span>{isConnecting ? 'Connecting...' : 'Connect MetaMask'}</span>
-                  </button>
-
-                  <div className="relative">
-                    <div className="absolute inset-0 flex items-center">
-                      <div className="w-full border-t border-white/10"></div>
-                    </div>
-                    <div className="relative flex justify-center text-sm">
-                      <span className="px-2 bg-crypto-light text-gray-400">OR</span>
-                    </div>
-                  </div>
-
                   <div>
-                    <label className="block text-gray-400 text-sm mb-2">Manual Wallet Address</label>
+                    <label className="block text-gray-400 text-sm mb-2">Wallet Address</label>
                     <input
                       type="text"
                       placeholder="0x..."
                       value={walletInput}
                       onChange={(e) => setWalletInput(e.target.value)}
-                      className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-crypto-accent transition"
+                      className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-crypto-accent"
                     />
                   </div>
                   <button
-                    onClick={handleManualConnect}
-                    className="w-full btn-primary text-sm"
+                    onClick={handleConnect}
+                    className="w-full btn-primary"
                   >
                     Connect Wallet
                   </button>
                   <p className="text-xs text-gray-400 text-center">
-                    Enables automated revenue distribution to your wallet
+                    This enables automated revenue distribution
                   </p>
                 </div>
               ) : (
                 <div className="space-y-4">
                   <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
-                    <p className="text-sm text-green-400 mb-2 flex items-center space-x-2">
-                      <Check size={16} />
-                      <span>MetaMask Connected</span>
-                    </p>
-                    <p className="font-mono text-xs text-white break-all bg-black/30 p-2 rounded">{metamaskWallet}</p>
+                    <p className="text-sm text-green-400 mb-2">✓ Wallet Connected</p>
+                    <p className="font-mono text-sm text-white break-all">{adminWallet}</p>
                   </div>
                   <button
-                    onClick={() => handleCopy(metamaskWallet || '')}
+                    onClick={() => handleCopy(adminWallet || '')}
                     className="w-full flex items-center justify-center space-x-2 bg-white/10 hover:bg-white/20 rounded-lg px-4 py-2 transition"
                   >
                     {copied ? (
@@ -185,109 +126,68 @@ export default function Admin() {
             {/* Revenue Overview */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="glass-effect p-6">
-                <p className="text-gray-400 text-sm mb-2 flex items-center space-x-2">
-                  <TrendingUp size={16} />
-                  Total Revenue
-                </p>
-                <p className="text-3xl font-bold text-crypto-success">${revenueData.totalRevenue.toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
-              </div>
-              <div className="glass-effect p-6">
-                <p className="text-gray-400 text-sm mb-2 flex items-center space-x-2">
-                  <DollarSign size={16} />
-                  Monthly Revenue
-                </p>
-                <p className="text-3xl font-bold text-crypto-accent">${revenueData.monthlyRevenue.toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
+                <p className="text-gray-400 text-sm mb-2">Total Earnings</p>
+                <p className="text-3xl font-bold text-crypto-success">${walletData.totalEarnings.toLocaleString()}</p>
               </div>
               <div className="glass-effect p-6">
                 <p className="text-gray-400 text-sm mb-2">Course Revenue</p>
-                <p className="text-3xl font-bold text-blue-400">${revenueData.courseRevenue.toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
+                <p className="text-3xl font-bold text-crypto-accent">${walletData.revenue.toLocaleString()}</p>
               </div>
-              <div className="glass-effect p-6">
-                <p className="text-gray-400 text-sm mb-2">Subscription Revenue</p>
-                <p className="text-3xl font-bold text-purple-400">${revenueData.subscriptionRevenue.toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
-              </div>
-            </div>
-
-            {/* Additional Metrics */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="glass-effect p-6">
                 <p className="text-gray-400 text-sm mb-2">Wallet Balance</p>
-                <p className="text-2xl font-bold text-yellow-400">{revenueData.walletBalance} ETH</p>
+                <p className="text-3xl font-bold text-yellow-400">{walletData.balance} ETH</p>
               </div>
               <div className="glass-effect p-6">
                 <p className="text-gray-400 text-sm mb-2">Pending Payouts</p>
-                <p className="text-2xl font-bold text-orange-400">${revenueData.pendingPayouts.toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
-              </div>
-              <div className="glass-effect p-6">
-                <p className="text-gray-400 text-sm mb-2">Avg. Order Value</p>
-                <p className="text-2xl font-bold text-pink-400">${revenueData.avgOrderValue.toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
+                <p className="text-3xl font-bold text-orange-400">${walletData.pendingPayouts.toLocaleString()}</p>
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* Detailed Revenue Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Recent Transactions */}
-          <div className="glass-effect p-8">
-            <h3 className="text-xl font-bold mb-6">Recent Course Sales</h3>
-            <div className="space-y-4">
-              {[
-                { date: '2024-06-15', course: 'Elite Crypto Trading Bootcamp', amount: 1200, status: 'Completed' },
-                { date: '2024-06-14', course: 'Institutional Trading Masterclass', amount: 1500, status: 'Completed' },
-                { date: '2024-06-13', course: 'Whale Trading Secrets', amount: 999, status: 'Completed' },
-                { date: '2024-06-12', course: 'Advanced Trading Algorithms', amount: 799, status: 'Pending' },
-                { date: '2024-06-11', course: 'DeFi & Smart Contracts', amount: 499, status: 'Completed' },
-              ].map((tx, i) => (
-                <div key={i} className="flex items-center justify-between p-4 border-b border-white/10 last:border-0 hover:bg-white/5 rounded transition">
-                  <div>
-                    <p className="font-semibold text-sm">{tx.course}</p>
-                    <p className="text-xs text-gray-400">{tx.date}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-semibold">${tx.amount}</p>
-                    <p className={`text-xs ${
-                      tx.status === 'Completed' ? 'text-crypto-success' : 'text-yellow-400'
-                    }`}>
-                      {tx.status}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Payout Management */}
-          {isConnected && (
+            {/* Recent Transactions */}
             <div className="glass-effect p-8">
-              <h3 className="text-xl font-bold mb-6">Automatic Payouts</h3>
-              <p className="text-gray-300 mb-6 text-sm">All course revenue is automatically distributed to your MetaMask wallet every week.</p>
+              <h3 className="text-xl font-bold mb-6">Recent Transactions</h3>
               <div className="space-y-4">
-                <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
-                  <p className="text-green-400 text-sm font-semibold mb-2">✓ Auto Payouts Enabled</p>
-                  <p className="text-gray-400 text-xs">Revenue distributes every Monday at 00:00 UTC</p>
-                </div>
-                <button className="w-full btn-primary flex items-center justify-center space-x-2">
-                  <Send size={18} />
-                  <span>Withdraw ${revenueData.pendingPayouts.toLocaleString('en-US', { minimumFractionDigits: 2 })} Now</span>
-                </button>
-                <button className="w-full btn-secondary flex items-center justify-center space-x-2">
-                  <DollarSign size={18} />
-                  <span>Set Payout Schedule</span>
-                </button>
+                {[
+                  { date: '2024-06-15', course: 'Technical Analysis', amount: 49, status: 'Completed' },
+                  { date: '2024-06-14', course: 'DeFi & Smart Contracts', amount: 99, status: 'Completed' },
+                  { date: '2024-06-13', course: 'Portfolio Management', amount: 59, status: 'Pending' },
+                ].map((tx, i) => (
+                  <div key={i} className="flex items-center justify-between p-4 border-b border-white/10 last:border-0">
+                    <div>
+                      <p className="font-semibold">{tx.course}</p>
+                      <p className="text-sm text-gray-400">{tx.date}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-semibold">${tx.amount}</p>
+                      <p className={`text-sm ${
+                        tx.status === 'Completed' ? 'text-crypto-success' : 'text-yellow-400'
+                      }`}>
+                        {tx.status}
+                      </p>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-          )}
-        </div>
 
-        {/* Info Box */}
-        {isConnected && (
-          <div className="mt-8 glass-effect p-6 border-l-4 border-crypto-accent">
-            <p className="text-gray-300">
-              <strong>💡 Tip:</strong> Your revenue data updates in real-time. Monitor your earnings and manage automatic payouts directly from your MetaMask wallet. All transactions are secured on the blockchain.
-            </p>
+            {/* Withdrawal Options */}
+            {isConnected && (
+              <div className="glass-effect p-8">
+                <h3 className="text-xl font-bold mb-4">Automatic Payouts</h3>
+                <p className="text-gray-300 mb-6">All course revenue is automatically distributed to your connected wallet every week.</p>
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-3">
+                    <input type="checkbox" id="auto-payout" defaultChecked className="w-4 h-4" />
+                    <label htmlFor="auto-payout" className="text-gray-300">Enable automatic payouts</label>
+                  </div>
+                  <button className="w-full btn-primary">
+                    Withdraw ${walletData.pendingPayouts.toLocaleString()} Now
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
     </div>
   )

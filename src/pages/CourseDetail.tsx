@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom'
-import { BookOpen, Clock, Users, Star, ArrowLeft, Lock, Trophy } from 'lucide-react'
+import { BookOpen, Clock, Users, Star, ArrowLeft } from 'lucide-react'
 
 export default function CourseDetail() {
   const { id } = useParams()
@@ -15,7 +15,7 @@ export default function CourseDetail() {
       price: 0,
       tier: 'free',
       instructor: 'Sarah Chen',
-      image: '🔐',
+      image: '🔷',
       content: [
         'Introduction to blockchain technology',
         'Understanding Bitcoin and mining',
@@ -24,99 +24,28 @@ export default function CourseDetail() {
         'Market fundamentals and economics',
       ],
     },
-    '7': {
-      title: 'Elite Crypto Trading Bootcamp',
-      description: 'Comprehensive 12-week intensive program covering all aspects of professional crypto trading',
-      level: 'Expert',
-      duration: '12 weeks',
-      students: 280,
-      rating: 4.97,
-      price: 1200,
-      tier: 'premium',
-      instructor: 'Marcus Sterling',
-      image: '👑',
-      badge: 'MOST POPULAR',
-      certification: true,
+    '2': {
+      title: 'Technical Analysis Mastery',
+      description: 'Master chart patterns, indicators, and trading strategies',
+      level: 'Intermediate',
+      duration: '6 weeks',
+      students: 1800,
+      rating: 4.9,
+      price: 49,
+      tier: 'pro',
+      instructor: 'Mike Thompson',
+      image: '📈',
       content: [
-        'Advanced technical analysis & chart patterns',
-        'Fundamental analysis for crypto assets',
-        'Risk management and position sizing',
-        'Trading psychology and discipline',
-        'Building your trading strategy',
-        'Market microstructure & order flow',
-        'Advanced derivatives trading',
-        'Portfolio construction & rebalancing',
-        'Algorithmic trading basics',
-        'Real-time trading simulation',
-        'Live trading with mentor guidance',
-        'Professional trading setup',
-      ],
-    },
-    '8': {
-      title: 'Institutional Trading Masterclass',
-      description: 'Learn how institutions trade crypto at scale with advanced strategies and risk management',
-      level: 'Expert',
-      duration: '10 weeks',
-      students: 150,
-      rating: 4.99,
-      price: 1500,
-      tier: 'premium',
-      instructor: 'James Mitchell (Former JP Morgan)',
-      image: '🏛️',
-      badge: 'EXCLUSIVE',
-      certification: true,
-      content: [
-        'Institutional trading operations',
-        'Large volume execution strategies',
-        'Market making and liquidity',
-        'Arbitrage opportunities & execution',
-        'OTC trading and block deals',
-        'Regulatory compliance & reporting',
-        'Risk frameworks & compliance',
-        'Building trading infrastructure',
-        'Quantitative analysis & modeling',
-        'High-frequency trading concepts',
-      ],
-    },
-    '9': {
-      title: 'Whale Trading Secrets',
-      description: 'Discover the trading patterns and strategies used by crypto whales and institutions',
-      level: 'Expert',
-      duration: '8 weeks',
-      students: 320,
-      rating: 4.96,
-      price: 999,
-      tier: 'premium',
-      instructor: 'Alex Rivera',
-      image: '🐋',
-      certification: true,
-      content: [
-        'Identifying whale transactions & patterns',
-        'On-chain analysis techniques',
-        'Large accumulation patterns',
-        'Pump & dump detection',
-        'Smart contract interaction analysis',
-        'Exchange flow analysis',
-        'Whale wallet tracking',
-        'Network effects & game theory',
+        'Candlestick patterns and chart reading',
+        'Moving averages and trend analysis',
+        'Support and resistance levels',
+        'RSI, MACD, and other indicators',
+        'Building a complete trading strategy',
       ],
     },
   }
 
   const course = courseData[id || '1']
-
-  if (!course) {
-    return (
-      <div className="min-h-screen bg-crypto-dark flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold mb-4">Course Not Found</h1>
-          <Link to="/courses" className="btn-primary">
-            Back to Courses
-          </Link>
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div className="min-h-screen bg-crypto-dark">
@@ -135,22 +64,15 @@ export default function CourseDetail() {
               <h1 className="text-4xl font-bold mt-4 mb-2">{course.title}</h1>
               <p className="text-xl text-gray-300">{course.description}</p>
             </div>
-            <div className="flex flex-col gap-2 items-end">
-              <span className={`px-4 py-2 rounded-lg font-bold h-fit ${
-                course.tier === 'free'
-                  ? 'bg-green-500/20 text-green-400'
-                  : course.tier === 'pro'
-                  ? 'bg-blue-500/20 text-blue-400'
-                  : 'bg-yellow-500/20 text-yellow-400'
-              }`}>
-                {course.tier.toUpperCase()}
-              </span>
-              {course.badge && (
-                <span className="px-4 py-2 rounded-lg font-bold bg-purple-500/20 text-purple-400">
-                  {course.badge}
-                </span>
-              )}
-            </div>
+            <span className={`px-4 py-2 rounded-lg font-bold h-fit ${
+              course.tier === 'free'
+                ? 'bg-green-500/20 text-green-400'
+                : course.tier === 'pro'
+                ? 'bg-blue-500/20 text-blue-400'
+                : 'bg-yellow-500/20 text-yellow-400'
+            }`}>
+              {course.tier.toUpperCase()}
+            </span>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6 border-t border-white/10">
@@ -201,15 +123,14 @@ export default function CourseDetail() {
             <div className="glass-effect p-8">
               <h2 className="text-2xl font-bold mb-6">Course Structure</h2>
               <div className="space-y-4">
-                {course.content.slice(0, Math.ceil(course.content.length / 2)).map((_, i) => (
+                {[...Array(5)].map((_, i) => (
                   <div key={i} className="border-b border-white/10 pb-4 last:border-0">
-                    <h3 className="font-semibold mb-2">Week {i + 1}: {course.title.split(' ')[0]} Module</h3>
+                    <h3 className="font-semibold mb-2">Week {i + 1}: Module Title</h3>
                     <ul className="text-sm text-gray-400 space-y-1 ml-4">
-                      <li>• Lesson 1: Core Concepts</li>
-                      <li>• Lesson 2: Advanced Strategies</li>
-                      <li>• Lesson 3: Practical Trading</li>
-                      <li>• Live Q&A Session</li>
-                      <li>• Assignment & Assessment</li>
+                      <li>• Lesson 1: Introduction</li>
+                      <li>• Lesson 2: Core Concepts</li>
+                      <li>• Lesson 3: Practical Exercise</li>
+                      <li>• Quiz & Assessment</li>
                     </ul>
                   </div>
                 ))}
@@ -222,48 +143,30 @@ export default function CourseDetail() {
             {/* Enrollment Card */}
             <div className="glass-effect p-8 sticky top-20">
               <div className="text-4xl font-bold mb-2">
-                {course.price === 0 ? 'Free' : `$${course.price.toLocaleString()}`}
+                {course.price === 0 ? 'Free' : `$${course.price}`}
               </div>
               <p className="text-gray-400 text-sm mb-6">One-time payment</p>
 
               <button className={`w-full mb-4 py-3 rounded-lg font-semibold transition ${
                 course.price === 0 ? 'btn-primary' : 'btn-premium'
               }`}>
-                {course.price === 0 ? 'Enroll Now' : 'Enroll & Pay'}
+                {course.price === 0 ? 'Enroll Now' : 'Upgrade & Enroll'}
               </button>
 
               <button className="btn-secondary w-full mb-6">
                 Add to Wishlist
               </button>
 
-              {/* Features */}
+              {/* Stats */}
               <div className="space-y-4 pt-6 border-t border-white/10">
-                {course.certification && (
-                  <div className="flex items-center space-x-2 text-crypto-accent">
-                    <Trophy size={18} />
-                    <span className="text-sm">Certificate upon completion</span>
-                  </div>
-                )}
-                {course.price >= 999 && (
-                  <div className="flex items-center space-x-2 text-yellow-400">
-                    <Lock size={18} />
-                    <span className="text-sm">Exclusive content</span>
-                  </div>
-                )}
-                <div className="flex items-center space-x-2 text-gray-300">
-                  <Users size={18} />
-                  <span className="text-sm">{course.students} students enrolled</span>
+                <div className="flex items-center space-x-2">
+                  <Users size={18} className="text-crypto-accent" />
+                  <span className="text-gray-300">{course.students} students enrolled</span>
                 </div>
-                <div className="flex items-center space-x-2 text-gray-300">
+                <div className="flex items-center space-x-2">
                   <Star size={18} className="text-yellow-400" />
-                  <span className="text-sm">{course.rating} rating</span>
+                  <span className="text-gray-300">{course.rating} rating</span>
                 </div>
-              </div>
-
-              {/* Money Back Guarantee */}
-              <div className="mt-6 p-4 bg-green-500/10 border border-green-500/30 rounded-lg">
-                <p className="text-green-400 text-sm font-semibold mb-1">✓ 30-Day Money Back Guarantee</p>
-                <p className="text-gray-400 text-xs">Not satisfied? Full refund, no questions asked.</p>
               </div>
             </div>
           </div>
