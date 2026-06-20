@@ -15,19 +15,38 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  // Sample data - replace with real API calls
-  useEffect(() => {
-    const sampleData: CryptoData[] = [
-      { id: '1', name: 'Bitcoin', symbol: 'BTC', price: 42500, change24h: 2.5, marketCap: 850000000000 },
-      { id: '2', name: 'Ethereum', symbol: 'ETH', price: 2250, change24h: -1.2, marketCap: 270000000000 },
-      { id: '3', name: 'Cardano', symbol: 'ADA', price: 0.75, change24h: 3.8, marketCap: 27000000000 },
-      { id: '4', name: 'Solana', symbol: 'SOL', price: 145, change24h: 5.2, marketCap: 62000000000 },
-    ]
-    
-    setTimeout(() => {
+  const fetchCryptoData = async () => {
+    try {
+      setLoading(true)
+      setError(null)
+      
+      // Sample data - replace with real API calls
+      // Example: const response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false')
+      // if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+      // const data = await response.json()
+      
+      const sampleData: CryptoData[] = [
+        { id: '1', name: 'Bitcoin', symbol: 'BTC', price: 42500, change24h: 2.5, marketCap: 850000000000 },
+        { id: '2', name: 'Ethereum', symbol: 'ETH', price: 2250, change24h: -1.2, marketCap: 270000000000 },
+        { id: '3', name: 'Cardano', symbol: 'ADA', price: 0.75, change24h: 3.8, marketCap: 27000000000 },
+        { id: '4', name: 'Solana', symbol: 'SOL', price: 145, change24h: 5.2, marketCap: 62000000000 },
+      ]
+      
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 500))
+      
       setCryptos(sampleData)
+    } catch (err) {
+      console.error('Failed to fetch crypto data:', err)
+      setError(err instanceof Error ? err.message : 'Failed to load market data. Please try again later.')
+    } finally {
       setLoading(false)
-    }, 500)
+    }
+  }
+
+  // Fetch crypto data with proper error handling
+  useEffect(() => {
+    fetchCryptoData()
   }, [])
 
   const portfolioValue = 15250.00
@@ -110,8 +129,17 @@ export default function Dashboard() {
               <p className="mt-4 text-gray-400">Loading market data...</p>
             </div>
           ) : error ? (
-            <div className="p-12 text-center text-crypto-danger">
-              <p>Error loading data: {error}</p>
+            <div className="p-12 text-center">
+              <div className="glass-effect inline-block p-6 rounded-lg border-l-4 border-crypto-danger">
+                <p className="text-crypto-danger font-semibold mb-2">⚠️ Error Loading Data</p>
+                <p className="text-gray-300 mb-4">{error}</p>
+                <button 
+                  onClick={fetchCryptoData}
+                  className="btn-primary"
+                >
+                  Try Again
+                </button>
+              </div>
             </div>
           ) : (
             <div className="overflow-x-auto">

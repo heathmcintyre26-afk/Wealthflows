@@ -31,10 +31,15 @@ export default function Admin() {
     setIsConnected(false)
   }
 
-  const handleCopy = (text: string) => {
-    navigator.clipboard.writeText(text)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+  const handleCopy = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch (err) {
+      console.error('Failed to copy to clipboard:', err)
+      alert('Failed to copy to clipboard. Please copy manually.')
+    }
   }
 
   return (
