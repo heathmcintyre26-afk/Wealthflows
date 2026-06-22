@@ -1,4 +1,4 @@
-import { BookOpen, Star, Users } from 'lucide-react'
+import { BookOpen, Star } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 export default function Courses() {
