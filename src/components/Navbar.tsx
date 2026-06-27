@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { Menu, X, Wallet } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { useWallet } from '../context/WalletContext'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
+  const { adminWallet, isConnected } = useWallet()
 
   return (
     <nav className="bg-crypto-light border-b border-white/10 sticky top-0 z-50">
@@ -23,9 +25,9 @@ export default function Navbar() {
             <Link to="/dashboard" className="text-gray-300 hover:text-white transition">Dashboard</Link>
             <Link to="/courses" className="text-gray-300 hover:text-white transition">Courses</Link>
             <Link to="/pricing" className="text-gray-300 hover:text-white transition">Pricing</Link>
-            <button className="btn-primary text-sm">
-              Connect Wallet
-            </button>
+            <Link to="/admin" className="btn-primary text-sm">
+              {isConnected ? `Wallet ${adminWallet?.slice(0, 6)}...` : 'Connect Wallet'}
+            </Link>
             <Link to="/admin" className="text-gray-300 hover:text-crypto-accent transition text-sm">
               Admin
             </Link>
@@ -48,9 +50,9 @@ export default function Navbar() {
             <Link to="/courses" className="block py-2 text-gray-300 hover:text-white">Courses</Link>
             <Link to="/pricing" className="block py-2 text-gray-300 hover:text-white">Pricing</Link>
             <Link to="/admin" className="block py-2 text-gray-300 hover:text-white">Admin</Link>
-            <button className="btn-primary w-full mt-4 text-sm">
-              Connect Wallet
-            </button>
+            <Link to="/admin" className="btn-primary block w-full mt-4 text-sm text-center">
+              {isConnected ? `Wallet ${adminWallet?.slice(0, 6)}...` : 'Connect Wallet'}
+            </Link>
           </div>
         )}
       </div>

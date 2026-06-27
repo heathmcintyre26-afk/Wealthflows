@@ -13,7 +13,7 @@ interface CryptoData {
 export default function Dashboard() {
   const [cryptos, setCryptos] = useState<CryptoData[]>([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const error: string | null = null
 
   // Sample data - replace with real API calls
   useEffect(() => {

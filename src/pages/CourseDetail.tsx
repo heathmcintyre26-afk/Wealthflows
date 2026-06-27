@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom'
-import { BookOpen, Clock, Users, Star, ArrowLeft } from 'lucide-react'
+import { Clock, Users, Star, ArrowLeft } from 'lucide-react'
 
 export default function CourseDetail() {
   const { id } = useParams()
