@@ -51,6 +51,23 @@ npm run build
 npm run preview
 ```
 
+## Live Deployment
+
+This repository is configured to deploy automatically to **GitHub Pages**.
+
+### Automatic Deploy
+- Push to `main`
+- GitHub Actions will run lint + build
+- The built `dist/` output is deployed to Pages
+
+### One-time GitHub setup
+1. Open repository **Settings → Pages**
+2. Set **Source** to **GitHub Actions**
+3. Save
+
+Your live URL will be:
+`https://heathmcintyre26-afk.github.io/Wealthflows/`
+
 ## Project Structure
 ```
 Wealthflows/
