@@ -7,7 +7,7 @@ import Pricing from './pages/Pricing'
 import Courses from './pages/Courses'
 import CourseDetail from './pages/CourseDetail'
 import Admin from './pages/Admin'
-import { WalletProvider } from './context/WalletContext'
+import { WalletProvider } from './context/WalletProvider'
 
 function App() {
   return (

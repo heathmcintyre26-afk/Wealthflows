@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Wallet, Lock, LogOut, Copy, Check } from 'lucide-react'
-import { useWallet } from '../context/WalletContext'
+import { useWallet } from '../context/wallet'
 
 export default function Admin() {
   const [walletInput, setWalletInput] = useState('')

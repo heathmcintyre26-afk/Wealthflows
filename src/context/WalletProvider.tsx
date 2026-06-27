@@ -1,13 +1,5 @@
-import { createContext, useContext, useMemo, useState, type ReactNode } from 'react'
-
-interface WalletContextValue {
-  adminWallet: string | null
-  isConnected: boolean
-  connectWallet: (walletAddress: string) => boolean
-  disconnectWallet: () => void
-}
-
-const WalletContext = createContext<WalletContextValue | undefined>(undefined)
+import { useMemo, useState, type ReactNode } from 'react'
+import { WalletContext, type WalletContextValue } from './wallet'
 
 export function WalletProvider({ children }: { children: ReactNode }) {
   const [adminWallet, setAdminWallet] = useState<string | null>(null)
@@ -33,14 +25,4 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       {children}
     </WalletContext.Provider>
   )
-}
-
-export function useWallet() {
-  const context = useContext(WalletContext)
-
-  if (!context) {
-    throw new Error('useWallet must be used within a WalletProvider')
-  }
-
-  return context
 }

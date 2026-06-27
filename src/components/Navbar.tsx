@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Menu, X, Wallet } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { useWallet } from '../context/WalletContext'
+import { useWallet } from '../context/wallet'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
