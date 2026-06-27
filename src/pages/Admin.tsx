@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Wallet, Lock, LogOut, Copy, Check } from 'lucide-react'
+import { useWallet } from '../context/wallet'
 
 export default function Admin() {
-  const [adminWallet, setAdminWallet] = useState<string | null>(null)
   const [walletInput, setWalletInput] = useState('')
   const [copied, setCopied] = useState(false)
-  const [isConnected, setIsConnected] = useState(false)
+  const { adminWallet, isConnected, connectWallet, disconnectWallet } = useWallet()
 
   // Simulated wallet data
   const walletData = {
@@ -17,9 +17,7 @@ export default function Admin() {
   }
 
   const handleConnect = () => {
-    if (walletInput.toLowerCase().startsWith('0x')) {
-      setAdminWallet(walletInput)
-      setIsConnected(true)
+    if (connectWallet(walletInput)) {
       setWalletInput('')
     } else {
       alert('Please enter a valid Ethereum wallet address')
@@ -27,8 +25,8 @@ export default function Admin() {
   }
 
   const handleDisconnect = () => {
-    setAdminWallet(null)
-    setIsConnected(false)
+    disconnectWallet()
+    setCopied(false)
   }
 
   const handleCopy = (text: string) => {
@@ -36,6 +34,10 @@ export default function Admin() {
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
+
+  useEffect(() => {
+    setCopied(false)
+  }, [adminWallet])
 
   return (
     <div className="min-h-screen bg-crypto-dark">
