@@ -22,6 +22,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Vercel
+.vercel
+!.vercel/project.json
+
 # IDE
 .vscode
 .idea
