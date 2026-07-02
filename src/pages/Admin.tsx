@@ -2,20 +2,48 @@ import { useState } from 'react'
 import { Wallet, Lock, LogOut, Copy, Check } from 'lucide-react'
 
 const ADMIN_WALLET_KEY = 'wf_admin_wallet'
+const ETH_ADDRESS_RE = /^0x[0-9a-fA-F]{40}$/
+
+function readPersistedAdminWallet() {
+  if (typeof window === 'undefined') return null
+  try {
+    const stored = window.sessionStorage.getItem(ADMIN_WALLET_KEY)
+    if (stored && !ETH_ADDRESS_RE.test(stored)) {
+      window.sessionStorage.removeItem(ADMIN_WALLET_KEY)
+      return null
+    }
+    return stored
+  } catch {
+    return null
+  }
+}
+
+function persistAdminWallet(address: string) {
+  if (typeof window === 'undefined') return
+  try {
+    window.sessionStorage.setItem(ADMIN_WALLET_KEY, address)
+  } catch {
+    // Ignore sessionStorage write failures
+  }
+}
+
+function clearPersistedAdminWallet() {
+  if (typeof window === 'undefined') return
+  try {
+    window.sessionStorage.removeItem(ADMIN_WALLET_KEY)
+  } catch {
+    // Ignore sessionStorage removal failures
+  }
+}
 
 export default function Admin() {
   const [adminWallet, setAdminWallet] = useState<string | null>(
-    () => sessionStorage.getItem(ADMIN_WALLET_KEY)
+    () => readPersistedAdminWallet()
   )
   const [walletInput, setWalletInput] = useState('')
   const [copied, setCopied] = useState(false)
-  const [isConnected, setIsConnected] = useState(
-    () => sessionStorage.getItem(ADMIN_WALLET_KEY) !== null
-  )
+  const isConnected = adminWallet !== null
   const [connectError, setConnectError] = useState<string | null>(null)
-
-  // Ethereum address: 0x followed by exactly 40 hex characters
-  const ETH_ADDRESS_RE = /^0x[0-9a-fA-F]{40}$/
 
   // Simulated wallet data
   const walletData = {
@@ -27,21 +55,20 @@ export default function Admin() {
   }
 
   const handleConnect = () => {
-    if (!ETH_ADDRESS_RE.test(walletInput)) {
+    const normalizedAddress = walletInput.trim()
+    if (!ETH_ADDRESS_RE.test(normalizedAddress)) {
       setConnectError('Please enter a valid Ethereum wallet address (0x followed by 40 hex characters)')
       return
     }
     setConnectError(null)
-    sessionStorage.setItem(ADMIN_WALLET_KEY, walletInput)
-    setAdminWallet(walletInput)
-    setIsConnected(true)
+    persistAdminWallet(normalizedAddress)
+    setAdminWallet(normalizedAddress)
     setWalletInput('')
   }
 
   const handleDisconnect = () => {
-    sessionStorage.removeItem(ADMIN_WALLET_KEY)
+    clearPersistedAdminWallet()
     setAdminWallet(null)
-    setIsConnected(false)
   }
 
   const handleCopy = (text: string) => {
