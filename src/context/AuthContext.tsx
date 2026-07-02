@@ -3,7 +3,7 @@ import { createContext, useContext, useState, ReactNode } from 'react'
 interface AuthContextType {
   isAuthenticated: boolean
   walletAddress: string | null
-  login: (address: string) => void
+  login: (address: string) => boolean
   logout: () => void
 }
 
@@ -53,9 +53,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = (address: string) => {
     const normalizedAddress = address.trim()
-    if (!ETH_ADDRESS_RE.test(normalizedAddress)) return
+    if (!ETH_ADDRESS_RE.test(normalizedAddress)) return false
     persistWallet(normalizedAddress)
     setWalletAddress(normalizedAddress)
+    return true
   }
 
   const logout = () => {

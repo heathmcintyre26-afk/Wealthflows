@@ -19,8 +19,12 @@ export default function Login() {
       setError('Please enter a valid Ethereum wallet address (0x followed by 40 hex characters)')
       return
     }
+    const didLogin = login(walletInput)
+    if (!didLogin) {
+      setError('Unable to connect wallet. Please try again.')
+      return
+    }
     setError(null)
-    login(walletInput)
   }
 
   return (
