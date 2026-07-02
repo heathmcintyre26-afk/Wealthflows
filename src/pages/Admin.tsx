@@ -1,11 +1,21 @@
 import { useState } from 'react'
 import { Wallet, Lock, LogOut, Copy, Check } from 'lucide-react'
 
+const ADMIN_WALLET_KEY = 'wf_admin_wallet'
+
 export default function Admin() {
-  const [adminWallet, setAdminWallet] = useState<string | null>(null)
+  const [adminWallet, setAdminWallet] = useState<string | null>(
+    () => sessionStorage.getItem(ADMIN_WALLET_KEY)
+  )
   const [walletInput, setWalletInput] = useState('')
   const [copied, setCopied] = useState(false)
-  const [isConnected, setIsConnected] = useState(false)
+  const [isConnected, setIsConnected] = useState(
+    () => sessionStorage.getItem(ADMIN_WALLET_KEY) !== null
+  )
+  const [connectError, setConnectError] = useState<string | null>(null)
+
+  // Ethereum address: 0x followed by exactly 40 hex characters
+  const ETH_ADDRESS_RE = /^0x[0-9a-fA-F]{40}$/
 
   // Simulated wallet data
   const walletData = {
@@ -17,16 +27,19 @@ export default function Admin() {
   }
 
   const handleConnect = () => {
-    if (walletInput.toLowerCase().startsWith('0x')) {
-      setAdminWallet(walletInput)
-      setIsConnected(true)
-      setWalletInput('')
-    } else {
-      alert('Please enter a valid Ethereum wallet address')
+    if (!ETH_ADDRESS_RE.test(walletInput)) {
+      setConnectError('Please enter a valid Ethereum wallet address (0x followed by 40 hex characters)')
+      return
     }
+    setConnectError(null)
+    sessionStorage.setItem(ADMIN_WALLET_KEY, walletInput)
+    setAdminWallet(walletInput)
+    setIsConnected(true)
+    setWalletInput('')
   }
 
   const handleDisconnect = () => {
+    sessionStorage.removeItem(ADMIN_WALLET_KEY)
     setAdminWallet(null)
     setIsConnected(false)
   }
@@ -73,10 +86,17 @@ export default function Admin() {
                       type="text"
                       placeholder="0x..."
                       value={walletInput}
-                      onChange={(e) => setWalletInput(e.target.value)}
+                      onChange={(e) => {
+                        setWalletInput(e.target.value)
+                        setConnectError(null)
+                      }}
                       className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-crypto-accent"
                     />
                   </div>
+
+                  {connectError && (
+                    <p className="text-sm text-crypto-danger">{connectError}</p>
+                  )}
                   <button
                     onClick={handleConnect}
                     className="w-full btn-primary"

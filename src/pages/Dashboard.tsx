@@ -23,11 +23,18 @@ export default function Dashboard() {
       { id: '3', name: 'Cardano', symbol: 'ADA', price: 0.75, change24h: 3.8, marketCap: 27000000000 },
       { id: '4', name: 'Solana', symbol: 'SOL', price: 145, change24h: 5.2, marketCap: 62000000000 },
     ]
-    
-    setTimeout(() => {
-      setCryptos(sampleData)
-      setLoading(false)
+
+    const timer = setTimeout(() => {
+      try {
+        setCryptos(sampleData)
+      } catch (e) {
+        setError(e instanceof Error ? e.message : 'Failed to load market data')
+      } finally {
+        setLoading(false)
+      }
     }, 500)
+
+    return () => clearTimeout(timer)
   }, [])
 
   const portfolioValue = 15250.00
