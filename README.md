@@ -51,6 +51,18 @@ npm run build
 npm run preview
 ```
 
+### Deploy to GitHub Pages
+```bash
+npm run deploy
+```
+
+This project is configured for GitHub Pages at `https://heathmcintyre26-afk.github.io/Wealthflows/`.
+
+To enable automatic deployments:
+1. Go to **Settings → Pages**.
+2. Set **Source** to **GitHub Actions**.
+3. Push to `main` to trigger `.github/workflows/deploy.yml`.
+
 ## Project Structure
 ```
 Wealthflows/
@@ -214,6 +226,7 @@ The dashboard uses sample data. To integrate real APIs:
 
 - `npm run dev` - Start development server with hot reload
 - `npm run build` - Build for production
+- `npm run deploy` - Build and publish `dist/` to the `gh-pages` branch
 - `npm run preview` - Preview production build locally
 - `npm run lint` - Run ESLint code analysis
 
