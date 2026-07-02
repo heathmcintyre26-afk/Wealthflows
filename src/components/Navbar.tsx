@@ -32,7 +32,7 @@ export default function Navbar() {
                 <Link to="/admin" className="text-gray-300 hover:text-crypto-accent transition text-sm">
                   Admin
                 </Link>
-                <button onClick={logout} className="flex items-center space-x-1 text-gray-300 hover:text-white transition text-sm">
+                <button type="button" onClick={logout} className="flex items-center space-x-1 text-gray-300 hover:text-white transition text-sm">
                   <LogOut size={16} />
                   <span>Disconnect</span>
                 </button>
