@@ -20,7 +20,7 @@ export default function Login() {
       return
     }
     setError(null)
-    login()
+    login(walletInput)
   }
 
   return (

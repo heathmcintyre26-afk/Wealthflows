@@ -1,11 +1,17 @@
 import { useState } from 'react'
 import { Wallet, Lock, LogOut, Copy, Check } from 'lucide-react'
 
+const ADMIN_WALLET_KEY = 'wf_admin_wallet'
+
 export default function Admin() {
-  const [adminWallet, setAdminWallet] = useState<string | null>(null)
+  const [adminWallet, setAdminWallet] = useState<string | null>(
+    () => sessionStorage.getItem(ADMIN_WALLET_KEY)
+  )
   const [walletInput, setWalletInput] = useState('')
   const [copied, setCopied] = useState(false)
-  const [isConnected, setIsConnected] = useState(false)
+  const [isConnected, setIsConnected] = useState(
+    () => sessionStorage.getItem(ADMIN_WALLET_KEY) !== null
+  )
   const [connectError, setConnectError] = useState<string | null>(null)
 
   // Ethereum address: 0x followed by exactly 40 hex characters
@@ -26,12 +32,14 @@ export default function Admin() {
       return
     }
     setConnectError(null)
+    sessionStorage.setItem(ADMIN_WALLET_KEY, walletInput)
     setAdminWallet(walletInput)
     setIsConnected(true)
     setWalletInput('')
   }
 
   const handleDisconnect = () => {
+    sessionStorage.removeItem(ADMIN_WALLET_KEY)
     setAdminWallet(null)
     setIsConnected(false)
   }

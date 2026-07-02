@@ -2,20 +2,34 @@ import { createContext, useContext, useState, ReactNode } from 'react'
 
 interface AuthContextType {
   isAuthenticated: boolean
-  login: () => void
+  walletAddress: string | null
+  login: (address: string) => void
   logout: () => void
 }
+
+const SESSION_KEY = 'wf_wallet'
 
 const AuthContext = createContext<AuthContextType | null>(null)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [walletAddress, setWalletAddress] = useState<string | null>(
+    () => sessionStorage.getItem(SESSION_KEY)
+  )
 
-  const login = () => setIsAuthenticated(true)
-  const logout = () => setIsAuthenticated(false)
+  const isAuthenticated = walletAddress !== null
+
+  const login = (address: string) => {
+    sessionStorage.setItem(SESSION_KEY, address)
+    setWalletAddress(address)
+  }
+
+  const logout = () => {
+    sessionStorage.removeItem(SESSION_KEY)
+    setWalletAddress(null)
+  }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, walletAddress, login, logout }}>
       {children}
     </AuthContext.Provider>
   )
