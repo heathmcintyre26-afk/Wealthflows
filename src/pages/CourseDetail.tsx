@@ -1,65 +1,32 @@
 import { useParams, Link } from 'react-router-dom'
 import { Clock, Users, Star, ArrowLeft } from 'lucide-react'
-
-interface Course {
-  title: string
-  description: string
-  level: string
-  duration: string
-  students: number
-  rating: number
-  price: number
-  tier: string
-  instructor: string
-  image: string
-  content: string[]
-}
+import { courses } from '../data/courses'
 
 export default function CourseDetail() {
   const { id } = useParams()
+  const course = courses.find((entry) => entry.id === id)
 
-  const courseData: Record<string, Course> = {
-    '1': {
-      title: 'Crypto Fundamentals',
-      description: 'Learn the basics of blockchain, Bitcoin, and Ethereum',
-      level: 'Beginner',
-      duration: '4 weeks',
-      students: 2500,
-      rating: 4.8,
-      price: 0,
-      tier: 'free',
-      instructor: 'Sarah Chen',
-      image: '🔷',
-      content: [
-        'Introduction to blockchain technology',
-        'Understanding Bitcoin and mining',
-        'Ethereum and smart contracts basics',
-        'Cryptocurrency wallets and security',
-        'Market fundamentals and economics',
-      ],
-    },
-    '2': {
-      title: 'Technical Analysis Mastery',
-      description: 'Master chart patterns, indicators, and trading strategies',
-      level: 'Intermediate',
-      duration: '6 weeks',
-      students: 1800,
-      rating: 4.9,
-      price: 49,
-      tier: 'pro',
-      instructor: 'Mike Thompson',
-      image: '📈',
-      content: [
-        'Candlestick patterns and chart reading',
-        'Moving averages and trend analysis',
-        'Support and resistance levels',
-        'RSI, MACD, and other indicators',
-        'Building a complete trading strategy',
-      ],
-    },
+  if (!course) {
+    return (
+      <div className="min-h-screen bg-crypto-dark">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <Link to="/courses" className="inline-flex items-center space-x-2 text-crypto-accent hover:text-blue-400 mb-8">
+            <ArrowLeft size={20} />
+            <span>Back to Courses</span>
+          </Link>
+          <div className="glass-effect p-8 text-center">
+            <h1 className="text-3xl font-bold mb-4">Course not found</h1>
+            <p className="text-gray-300 mb-6">
+              The course you requested is unavailable. Browse the course catalog to choose another program.
+            </p>
+            <Link to="/courses" className="btn-primary inline-flex items-center justify-center">
+              View All Courses
+            </Link>
+          </div>
+        </div>
+      </div>
+    )
   }
-
-  const course = courseData[id || '1']
 
   return (
     <div className="min-h-screen bg-crypto-dark">
