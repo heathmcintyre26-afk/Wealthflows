@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom'
-import { Clock, Users, Star, ArrowLeft } from 'lucide-react'
+import { Clock, Users, Star, ArrowLeft, PlayCircle } from 'lucide-react'
 
 interface Course {
   title: string
@@ -13,6 +13,7 @@ interface Course {
   instructor: string
   image: string
   content: string[]
+  videoUrl: string
 }
 
 export default function CourseDetail() {
@@ -30,6 +31,7 @@ export default function CourseDetail() {
       tier: 'free',
       instructor: 'Sarah Chen',
       image: '🔷',
+      videoUrl: 'https://www.youtube.com/embed/SSo_EIwHSd4',
       content: [
         'Introduction to blockchain technology',
         'Understanding Bitcoin and mining',
@@ -49,6 +51,7 @@ export default function CourseDetail() {
       tier: 'pro',
       instructor: 'Mike Thompson',
       image: '📈',
+      videoUrl: 'https://www.youtube.com/embed/eAmIIxk9JM4',
       content: [
         'Candlestick patterns and chart reading',
         'Moving averages and trend analysis',
@@ -68,6 +71,7 @@ export default function CourseDetail() {
       tier: 'premium',
       instructor: 'Alex Rivera',
       image: '⚙️',
+      videoUrl: 'https://www.youtube.com/embed/M576WGiDBdQ',
       content: [
         'Introduction to decentralized finance (DeFi)',
         'How smart contracts work on Ethereum',
@@ -87,6 +91,7 @@ export default function CourseDetail() {
       tier: 'pro',
       instructor: 'Jamie Lee',
       image: '💼',
+      videoUrl: 'https://www.youtube.com/embed/3ehbcAqDDr4',
       content: [
         'Portfolio construction and asset allocation',
         'Risk-adjusted return metrics',
@@ -106,6 +111,7 @@ export default function CourseDetail() {
       tier: 'pro',
       instructor: 'Dr. Morgan Ellis',
       image: '🧠',
+      videoUrl: 'https://www.youtube.com/embed/KBVk8_i11_E',
       content: [
         'Understanding trading psychology and emotions',
         'Position sizing and capital preservation',
@@ -125,6 +131,7 @@ export default function CourseDetail() {
       tier: 'premium',
       instructor: 'Chris Nakamura',
       image: '🤖',
+      videoUrl: 'https://www.youtube.com/embed/GdTrGnEHdA0',
       content: [
         'Algorithmic trading fundamentals',
         'Building trading bots with Python',
@@ -209,6 +216,23 @@ export default function CourseDetail() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="md:col-span-2">
+            {/* Video Player */}
+            <div className="glass-effect p-6 mb-8">
+              <h2 className="text-2xl font-bold mb-4 flex items-center space-x-2">
+                <PlayCircle size={24} className="text-crypto-accent" />
+                <span>Course Preview</span>
+              </h2>
+              <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                <iframe
+                  className="absolute inset-0 w-full h-full rounded-lg"
+                  src={course.videoUrl}
+                  title={`${course.title} preview`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            </div>
+
             <div className="glass-effect p-8 mb-8">
               <h2 className="text-2xl font-bold mb-6">What You'll Learn</h2>
               <ul className="space-y-4">

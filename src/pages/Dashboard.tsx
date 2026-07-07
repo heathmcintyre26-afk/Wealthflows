@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { TrendingUp, TrendingDown, DollarSign, Target } from 'lucide-react'
+import { TrendingUp, TrendingDown, DollarSign, Target, Bug } from 'lucide-react'
+import { useWallet } from '../context/wallet'
 
 interface CryptoData {
   id: string
@@ -11,6 +12,7 @@ interface CryptoData {
 }
 
 export default function Dashboard() {
+  const { adminWallet, isConnected } = useWallet()
   const [cryptos, setCryptos] = useState<CryptoData[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -172,6 +174,92 @@ export default function Dashboard() {
           <p className="text-gray-300">
             💡 <strong>Pro Tip:</strong> Keep an eye on market trends and set alerts for your target prices. Wealthflows will notify you when buying opportunities align with your investment strategy.
           </p>
+        </div>
+
+        {/* My Data Debug Overview */}
+        <div className="mt-8 glass-effect p-6">
+          <h2 className="text-xl font-bold mb-4 flex items-center space-x-2">
+            <Bug size={20} className="text-purple-400" />
+            <span>My Data Overview</span>
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Wallet Info */}
+            <div className="bg-white/5 rounded-lg p-4">
+              <p className="text-gray-400 text-xs uppercase tracking-wider mb-3">Wallet</p>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Status</span>
+                  <span className={isConnected ? 'text-crypto-success' : 'text-crypto-danger'}>
+                    {isConnected ? '🟢 Connected' : '🔴 Disconnected'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Address</span>
+                  <span className="font-mono text-xs">
+                    {adminWallet ? `${adminWallet.slice(0, 10)}...${adminWallet.slice(-4)}` : '—'}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Portfolio Snapshot */}
+            <div className="bg-white/5 rounded-lg p-4">
+              <p className="text-gray-400 text-xs uppercase tracking-wider mb-3">Portfolio Snapshot</p>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Total Value</span>
+                  <span>${portfolioValue.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">24h P&L</span>
+                  <span className={portfolioChange >= 0 ? 'text-crypto-success' : 'text-crypto-danger'}>
+                    {portfolioChange >= 0 ? '+' : ''}${portfolioChange.toLocaleString('en-US', { minimumFractionDigits: 2 })} ({portfolioChangePercent}%)
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Assets Tracked</span>
+                  <span>{cryptos.length}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Holdings Debug */}
+            <div className="bg-white/5 rounded-lg p-4 md:col-span-2">
+              <p className="text-gray-400 text-xs uppercase tracking-wider mb-3">Holdings Debug</p>
+              {loading ? (
+                <p className="text-gray-500 text-sm">Loading…</p>
+              ) : error ? (
+                <p className="text-crypto-danger text-sm">{error}</p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-xs font-mono">
+                    <thead>
+                      <tr className="text-gray-400 border-b border-white/10">
+                        <th className="text-left py-2 pr-4">id</th>
+                        <th className="text-left py-2 pr-4">symbol</th>
+                        <th className="text-right py-2 pr-4">price</th>
+                        <th className="text-right py-2 pr-4">change24h</th>
+                        <th className="text-right py-2">marketCap</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {cryptos.map((c) => (
+                        <tr key={c.id} className="border-b border-white/5">
+                          <td className="py-1 pr-4 text-gray-400">{c.id}</td>
+                          <td className="py-1 pr-4">{c.symbol}</td>
+                          <td className="py-1 pr-4 text-right">{c.price}</td>
+                          <td className={`py-1 pr-4 text-right ${c.change24h >= 0 ? 'text-crypto-success' : 'text-crypto-danger'}`}>
+                            {c.change24h >= 0 ? '+' : ''}{c.change24h}%
+                          </td>
+                          <td className="py-1 text-right text-gray-400">{c.marketCap.toLocaleString()}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>
