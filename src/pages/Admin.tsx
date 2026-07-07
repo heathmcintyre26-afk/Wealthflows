@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { Wallet, Lock, LogOut, Copy, Check } from 'lucide-react'
+import { Wallet, Lock, LogOut, Copy, Check, TrendingUp, TrendingDown } from 'lucide-react'
 import { useWallet } from '../context/wallet'
+import { get24hPnL } from '../utils/revenue'
 
 export default function Admin() {
   const [walletInput, setWalletInput] = useState('')
@@ -15,6 +16,8 @@ export default function Admin() {
     pendingPayouts: 3200.00,
     totalEarnings: 52650.50,
   }
+
+  const pnl24h = get24hPnL()
 
   const handleConnect = () => {
     if (connectWallet(walletInput)) {
@@ -142,6 +145,22 @@ export default function Admin() {
               <div className="glass-effect p-6">
                 <p className="text-gray-400 text-sm mb-2">Pending Payouts</p>
                 <p className="text-3xl font-bold text-orange-400">${walletData.pendingPayouts.toLocaleString()}</p>
+              </div>
+              <div className="glass-effect p-6 md:col-span-2">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-gray-400 text-sm mb-2">24h P&amp;L</p>
+                    <p className={`text-3xl font-bold ${pnl24h >= 0 ? 'text-crypto-success' : 'text-crypto-danger'}`}>
+                      {pnl24h >= 0 ? '+' : ''}${pnl24h.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                    </p>
+                  </div>
+                  <div className={`p-3 rounded-lg ${pnl24h >= 0 ? 'bg-green-500/20' : 'bg-red-500/20'}`}>
+                    {pnl24h >= 0
+                      ? <TrendingUp className="w-6 h-6 text-crypto-success" />
+                      : <TrendingDown className="w-6 h-6 text-crypto-danger" />
+                    }
+                  </div>
+                </div>
               </div>
             </div>
 
