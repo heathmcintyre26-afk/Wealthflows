@@ -1,10 +1,24 @@
 import { useParams, Link } from 'react-router-dom'
-import { BookOpen, Clock, Users, Star, ArrowLeft } from 'lucide-react'
+import { Clock, Users, Star, ArrowLeft } from 'lucide-react'
+
+interface Course {
+  title: string
+  description: string
+  level: string
+  duration: string
+  students: number
+  rating: number
+  price: number
+  tier: string
+  instructor: string
+  image: string
+  content: string[]
+}
 
 export default function CourseDetail() {
   const { id } = useParams()
 
-  const courseData: Record<string, any> = {
+  const courseData: Record<string, Course> = {
     '1': {
       title: 'Crypto Fundamentals',
       description: 'Learn the basics of blockchain, Bitcoin, and Ethereum',
