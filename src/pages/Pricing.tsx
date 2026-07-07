@@ -40,7 +40,7 @@ export default function Pricing() {
         'Everything in Pro +',
         'Advanced trading tools',
         'Custom strategy builder',
-        ' 24/7 priority support',
+        '24/7 priority support',
         'Unlimited portfolios',
         'VIP community access',
         'All courses + certification',
