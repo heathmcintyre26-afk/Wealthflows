@@ -151,7 +151,7 @@ export default function Admin() {
                   <div>
                     <p className="text-gray-400 text-sm mb-2">24h P&amp;L</p>
                     <p className={`text-3xl font-bold ${pnl24h >= 0 ? 'text-crypto-success' : 'text-crypto-danger'}`}>
-                      {pnl24h >= 0 ? '+' : ''}${pnl24h.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      {pnl24h >= 0 ? '+$' : '-$'}{Math.abs(pnl24h).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                     </p>
                   </div>
                   <div className={`p-3 rounded-lg ${pnl24h >= 0 ? 'bg-green-500/20' : 'bg-red-500/20'}`}>
