@@ -180,7 +180,7 @@ export default function Dashboard() {
         <div className="mt-8 glass-effect p-6">
           <h2 className="text-xl font-bold mb-4 flex items-center space-x-2">
             <Bug size={20} className="text-purple-400" />
-            <span>My Data Overview</span>
+            <span>My Data Debug</span>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Wallet Info */}

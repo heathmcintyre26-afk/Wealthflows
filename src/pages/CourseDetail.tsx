@@ -227,7 +227,7 @@ export default function CourseDetail() {
                   className="absolute inset-0 w-full h-full rounded-lg"
                   src={course.videoUrl}
                   title={`${course.title} preview`}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                 />
               </div>
