@@ -1,20 +1,34 @@
 import { useEffect, useState } from 'react'
-import { Wallet, Lock, LogOut, Copy, Check } from 'lucide-react'
+import { Wallet, Lock, LogOut, Copy, Check, TrendingUp, TrendingDown, BarChart2 } from 'lucide-react'
 import { useWallet } from '../context/wallet'
+import { fetchRevenueReport, type ReportPeriod, type RevenueReport } from '../utils/revenueReport'
+
+const WALLET_DATA = {
+  balance: 45.25,
+  revenue: 12450.50,
+  pendingPayouts: 3200.00,
+  totalEarnings: 52650.50,
+}
+
+const PERIODS: ReportPeriod[] = ['24h', '7d', '30d']
 
 export default function Admin() {
   const [walletInput, setWalletInput] = useState('')
   const [copied, setCopied] = useState(false)
   const { adminWallet, isConnected, connectWallet, disconnectWallet } = useWallet()
 
-  // Simulated wallet data
-  const walletData = {
-    address: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb',
-    balance: 45.25,
-    revenue: 12450.50,
-    pendingPayouts: 3200.00,
-    totalEarnings: 52650.50,
-  }
+  // Revenue report state
+  const [period, setPeriod] = useState<ReportPeriod>('24h')
+  const [report, setReport] = useState<RevenueReport | null>(null)
+  const [reportLoading, setReportLoading] = useState(false)
+
+  useEffect(() => {
+    setReportLoading(true)
+    fetchRevenueReport(period)
+      .then((data) => setReport(data))
+      .catch(() => { /* keep previous report on error */ })
+      .finally(() => setReportLoading(false))
+  }, [period])
 
   const handleConnect = () => {
     if (connectWallet(walletInput)) {
@@ -129,19 +143,19 @@ export default function Admin() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="glass-effect p-6">
                 <p className="text-gray-400 text-sm mb-2">Total Earnings</p>
-                <p className="text-3xl font-bold text-crypto-success">${walletData.totalEarnings.toLocaleString()}</p>
+                <p className="text-3xl font-bold text-crypto-success">${WALLET_DATA.totalEarnings.toLocaleString()}</p>
               </div>
               <div className="glass-effect p-6">
                 <p className="text-gray-400 text-sm mb-2">Course Revenue</p>
-                <p className="text-3xl font-bold text-crypto-accent">${walletData.revenue.toLocaleString()}</p>
+                <p className="text-3xl font-bold text-crypto-accent">${WALLET_DATA.revenue.toLocaleString()}</p>
               </div>
               <div className="glass-effect p-6">
                 <p className="text-gray-400 text-sm mb-2">Wallet Balance</p>
-                <p className="text-3xl font-bold text-yellow-400">{walletData.balance} ETH</p>
+                <p className="text-3xl font-bold text-yellow-400">{WALLET_DATA.balance} ETH</p>
               </div>
               <div className="glass-effect p-6">
                 <p className="text-gray-400 text-sm mb-2">Pending Payouts</p>
-                <p className="text-3xl font-bold text-orange-400">${walletData.pendingPayouts.toLocaleString()}</p>
+                <p className="text-3xl font-bold text-orange-400">${WALLET_DATA.pendingPayouts.toLocaleString()}</p>
               </div>
             </div>
 
@@ -183,8 +197,79 @@ export default function Admin() {
                     <label htmlFor="auto-payout" className="text-gray-300">Enable automatic payouts</label>
                   </div>
                   <button className="w-full btn-primary">
-                    Withdraw ${walletData.pendingPayouts.toLocaleString()} Now
+                    Withdraw ${WALLET_DATA.pendingPayouts.toLocaleString()} Now
                   </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Revenue Report */}
+        <div className="mt-12">
+          <div className="glass-effect p-8">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+              <h2 className="text-2xl font-bold flex items-center space-x-2">
+                <BarChart2 size={24} />
+                <span>Revenue Report</span>
+              </h2>
+              <div className="flex space-x-2">
+                {PERIODS.map((p) => (
+                  <button
+                    key={p}
+                    onClick={() => setPeriod(p)}
+                    className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition ${
+                      period === p
+                        ? 'gradient-crypto text-white'
+                        : 'bg-white/10 hover:bg-white/20 text-gray-300'
+                    }`}
+                  >
+                    {p}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {reportLoading || !report ? (
+              <div className="flex items-center justify-center py-12">
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-crypto-accent" />
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="glass-effect p-6">
+                  <div className="flex items-center justify-between mb-3">
+                    <p className="text-gray-400 text-sm">Total Revenue</p>
+                    <div className="bg-blue-500/20 p-2 rounded-lg">
+                      <TrendingUp size={18} className="text-crypto-accent" />
+                    </div>
+                  </div>
+                  <p className="text-3xl font-bold text-crypto-accent">
+                    ${report.totalRevenue.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                  </p>
+                </div>
+
+                <div className="glass-effect p-6">
+                  <div className="flex items-center justify-between mb-3">
+                    <p className="text-gray-400 text-sm">Total Expenses</p>
+                    <div className="bg-red-500/20 p-2 rounded-lg">
+                      <TrendingDown size={18} className="text-crypto-danger" />
+                    </div>
+                  </div>
+                  <p className="text-3xl font-bold text-crypto-danger">
+                    ${report.totalExpenses.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                  </p>
+                </div>
+
+                <div className="glass-effect p-6">
+                  <div className="flex items-center justify-between mb-3">
+                    <p className="text-gray-400 text-sm">Net Profit</p>
+                    <div className="bg-green-500/20 p-2 rounded-lg">
+                      <BarChart2 size={18} className="text-crypto-success" />
+                    </div>
+                  </div>
+                  <p className={`text-3xl font-bold ${report.netProfit >= 0 ? 'text-crypto-success' : 'text-crypto-danger'}`}>
+                    ${report.netProfit.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                  </p>
                 </div>
               </div>
             )}
