@@ -1,5 +1,5 @@
 export interface Course {
-  id: string
+  id: number
   title: string
   description: string
   level: string
@@ -15,7 +15,7 @@ export interface Course {
 
 export const courses: Course[] = [
   {
-    id: '1',
+    id: 1,
     title: 'Crypto Fundamentals',
     description: 'Learn the basics of blockchain, Bitcoin, and Ethereum',
     level: 'Beginner',
@@ -35,7 +35,7 @@ export const courses: Course[] = [
     ],
   },
   {
-    id: '2',
+    id: 2,
     title: 'Technical Analysis Mastery',
     description: 'Master chart patterns, indicators, and trading strategies',
     level: 'Intermediate',
@@ -55,7 +55,7 @@ export const courses: Course[] = [
     ],
   },
   {
-    id: '3',
+    id: 3,
     title: 'DeFi & Smart Contracts',
     description: 'Understand decentralized finance and smart contract development',
     level: 'Advanced',
@@ -75,7 +75,7 @@ export const courses: Course[] = [
     ],
   },
   {
-    id: '4',
+    id: 4,
     title: 'Portfolio Management Pro',
     description: 'Build and manage a professional cryptocurrency portfolio',
     level: 'Intermediate',
@@ -95,7 +95,7 @@ export const courses: Course[] = [
     ],
   },
   {
-    id: '5',
+    id: 5,
     title: 'Risk Management & Trading Psychology',
     description: 'Master the mental and strategic aspects of successful trading',
     level: 'All Levels',
@@ -115,7 +115,7 @@ export const courses: Course[] = [
     ],
   },
   {
-    id: '6',
+    id: 6,
     title: 'Advanced Trading Algorithms',
     description: 'Create and deploy automated trading bots and algorithms',
     level: 'Expert',

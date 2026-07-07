@@ -4,7 +4,8 @@ import { courses } from '../data/courses'
 
 export default function CourseDetail() {
   const { id } = useParams()
-  const course = courses.find((entry) => entry.id === id)
+  const courseId = Number(id)
+  const course = courses.find((entry) => entry.id === courseId)
 
   if (!course) {
     return (
