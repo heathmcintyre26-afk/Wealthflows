@@ -12,7 +12,7 @@ import { WalletProvider } from './context/WalletProvider'
 function App() {
   return (
     <WalletProvider>
-      <Router>
+      <Router basename={import.meta.env.BASE_URL}>
         <div className="min-h-screen bg-crypto-dark flex flex-col">
           <Navbar />
           <main className="flex-1">
