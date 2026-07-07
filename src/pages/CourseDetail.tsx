@@ -57,9 +57,99 @@ export default function CourseDetail() {
         'Building a complete trading strategy',
       ],
     },
+    '3': {
+      title: 'DeFi & Smart Contracts',
+      description: 'Understand decentralized finance and smart contract development',
+      level: 'Advanced',
+      duration: '8 weeks',
+      students: 950,
+      rating: 4.7,
+      price: 99,
+      tier: 'premium',
+      instructor: 'Alex Rivera',
+      image: '⚙️',
+      content: [
+        'Introduction to decentralized finance (DeFi)',
+        'How smart contracts work on Ethereum',
+        'Interacting with DeFi protocols',
+        'Yield farming and liquidity pools',
+        'Security considerations in smart contracts',
+      ],
+    },
+    '4': {
+      title: 'Portfolio Management Pro',
+      description: 'Build and manage a professional cryptocurrency portfolio',
+      level: 'Intermediate',
+      duration: '5 weeks',
+      students: 1200,
+      rating: 4.8,
+      price: 59,
+      tier: 'pro',
+      instructor: 'Jamie Lee',
+      image: '💼',
+      content: [
+        'Portfolio construction and asset allocation',
+        'Risk-adjusted return metrics',
+        'Rebalancing strategies',
+        'Tax considerations for crypto investors',
+        'Tools and platforms for portfolio tracking',
+      ],
+    },
+    '5': {
+      title: 'Risk Management & Trading Psychology',
+      description: 'Master the mental and strategic aspects of successful trading',
+      level: 'All Levels',
+      duration: '4 weeks',
+      students: 3100,
+      rating: 4.9,
+      price: 39,
+      tier: 'pro',
+      instructor: 'Dr. Morgan Ellis',
+      image: '🧠',
+      content: [
+        'Understanding trading psychology and emotions',
+        'Position sizing and capital preservation',
+        'Stop-loss and take-profit strategies',
+        'Avoiding common trading mistakes',
+        'Building a disciplined trading routine',
+      ],
+    },
+    '6': {
+      title: 'Advanced Trading Algorithms',
+      description: 'Create and deploy automated trading bots and algorithms',
+      level: 'Expert',
+      duration: '10 weeks',
+      students: 450,
+      rating: 4.95,
+      price: 199,
+      tier: 'premium',
+      instructor: 'Chris Nakamura',
+      image: '🤖',
+      content: [
+        'Algorithmic trading fundamentals',
+        'Building trading bots with Python',
+        'Backtesting strategies with historical data',
+        'Connecting to exchange APIs',
+        'Deploying and monitoring live bots',
+      ],
+    },
   }
 
-  const course = courseData[id || '1']
+  const course = courseData[id ?? '']
+
+  if (!course) {
+    return (
+      <div className="min-h-screen bg-crypto-dark flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-2xl font-bold mb-4">Course Not Found</p>
+          <Link to="/courses" className="inline-flex items-center space-x-2 text-crypto-accent hover:text-blue-400">
+            <ArrowLeft size={20} />
+            <span>Back to Courses</span>
+          </Link>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-crypto-dark">

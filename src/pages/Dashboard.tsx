@@ -13,20 +13,24 @@ interface CryptoData {
 export default function Dashboard() {
   const [cryptos, setCryptos] = useState<CryptoData[]>([])
   const [loading, setLoading] = useState(true)
-  const error: string | null = null
+  const [error, setError] = useState<string | null>(null)
 
   // Sample data - replace with real API calls
   useEffect(() => {
-    const sampleData: CryptoData[] = [
-      { id: '1', name: 'Bitcoin', symbol: 'BTC', price: 42500, change24h: 2.5, marketCap: 850000000000 },
-      { id: '2', name: 'Ethereum', symbol: 'ETH', price: 2250, change24h: -1.2, marketCap: 270000000000 },
-      { id: '3', name: 'Cardano', symbol: 'ADA', price: 0.75, change24h: 3.8, marketCap: 27000000000 },
-      { id: '4', name: 'Solana', symbol: 'SOL', price: 145, change24h: 5.2, marketCap: 62000000000 },
-    ]
-    
     setTimeout(() => {
-      setCryptos(sampleData)
-      setLoading(false)
+      try {
+        const sampleData: CryptoData[] = [
+          { id: '1', name: 'Bitcoin', symbol: 'BTC', price: 42500, change24h: 2.5, marketCap: 850000000000 },
+          { id: '2', name: 'Ethereum', symbol: 'ETH', price: 2250, change24h: -1.2, marketCap: 270000000000 },
+          { id: '3', name: 'Cardano', symbol: 'ADA', price: 0.75, change24h: 3.8, marketCap: 27000000000 },
+          { id: '4', name: 'Solana', symbol: 'SOL', price: 145, change24h: 5.2, marketCap: 62000000000 },
+        ]
+        setCryptos(sampleData)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An unexpected error occurred')
+      } finally {
+        setLoading(false)
+      }
     }, 500)
   }, [])
 
