@@ -1,0 +1,64 @@
+name: Bug report
+description: Report a reproducible issue with Wealthflows
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug. Please provide enough detail for us to reproduce and fix it quickly.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what is happening.
+      placeholder: When I open the dashboard, the portfolio chart does not load.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Provide exact steps so we can reproduce the behavior.
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Scroll down to '...'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: Tell us what you expected to happen.
+      placeholder: The chart should render my current holdings and performance.
+    validations:
+      required: true
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser
+      description: Browser name and version.
+      placeholder: Chrome 126
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: OS / Device
+      description: Operating system and device (if applicable).
+      placeholder: Windows 11 / Desktop
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Add screenshots, console errors, or anything else that might help.
