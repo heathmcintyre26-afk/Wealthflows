@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  @apply transition-colors duration-200;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-crypto-dark text-white;
+}
+
+.gradient-crypto {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.glass-effect {
+  @apply bg-white/10 backdrop-blur-md border border-white/20 rounded-lg;
+}
+
+.btn-primary {
+  @apply px-6 py-3 bg-crypto-accent hover:bg-blue-600 rounded-lg font-semibold transition-all duration-200 transform hover:scale-105;
+}
+
+.btn-secondary {
+  @apply px-6 py-3 border-2 border-crypto-accent text-crypto-accent hover:bg-crypto-accent hover:text-white rounded-lg font-semibold transition-all duration-200;
+}
+
+.btn-premium {
+  @apply px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 rounded-lg font-semibold transition-all duration-200 transform hover:scale-105 text-white;
+}
